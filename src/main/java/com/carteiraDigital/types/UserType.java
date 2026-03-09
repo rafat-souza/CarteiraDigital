@@ -1,4 +1,4 @@
-package com.carteiraDigital.models.user;
+package com.carteiraDigital.types;
 
 public enum UserType {
     COMMON,

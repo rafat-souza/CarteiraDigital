@@ -1,5 +1,6 @@
-package com.carteiraDigital.models.user;
+package com.carteiraDigital.models;
 
+import com.carteiraDigital.types.UserType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
