@@ -1,5 +1,6 @@
 package com.carteiraDigital.models;
 
+import com.carteiraDigital.DTOs.UserDTO;
 import com.carteiraDigital.types.UserType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -40,4 +41,14 @@ public class UserModel {
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    public UserModel(UserDTO data) {
+        this.firstName = data.firstName();
+        this.lastName = data.lastName();
+        this.document = data.document();
+        this.email = data.email();
+        this.password = data.password();
+        this.balance = data.balance();
+        this.userType = data.userType();
+    }
 }

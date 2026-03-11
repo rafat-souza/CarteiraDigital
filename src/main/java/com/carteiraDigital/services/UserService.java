@@ -1,5 +1,6 @@
 package com.carteiraDigital.services;
 
+import com.carteiraDigital.DTOs.UserDTO;
 import com.carteiraDigital.exceptions.NotFoundException;
 import com.carteiraDigital.exceptions.UnauthorizedException;
 import com.carteiraDigital.models.UserModel;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +34,20 @@ public class UserService {
         return this.repository.findUserById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
+    // Resgatar todos os usuários
+    public List<UserModel> getAllUsers() {
+        return this.repository.findAll();
+    }
+
     // Registrar usuário
-    public void registerUser(UserModel user) {
+    public UserModel createUser(UserDTO data) {
+        UserModel newUser = new UserModel(data);
+        this.saveUser(newUser);
+        return newUser;
+    }
+
+    // Atualizar usuário
+    public void saveUser(UserModel user) {
         this.repository.save(user);
     }
 }

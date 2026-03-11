@@ -46,8 +46,8 @@ public class TransactionService {
         receiver.setBalance(receiver.getBalance().add(transaction.value()));
 
         this.repository.save(newtransaction);
-        this.userService.registerUser(sender);
-        this.userService.registerUser(receiver);
+        this.userService.saveUser(sender);
+        this.userService.saveUser(receiver);
     }
 
     public boolean authorizeTransaction(UserModel sender, BigDecimal value) {
