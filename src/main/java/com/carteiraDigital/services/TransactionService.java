@@ -25,7 +25,9 @@ public class TransactionService {
 
     private final RestTemplate restTemplate;
 
-    public void createTransaction(TransactionDTO transaction) throws Exception {
+    private final NotificationService notificationService;
+
+    public TransactionModel createTransaction(TransactionDTO transaction) throws Exception {
         UserModel sender = this.userService.findUserById(transaction.senderId());
         UserModel receiver = this.userService.findUserById(transaction.receiverId());
 
@@ -36,18 +38,23 @@ public class TransactionService {
             throw new UnauthorizedException("Transação não autorizada");
         }
 
-        TransactionModel newtransaction = new TransactionModel();
-        newtransaction.setAmount(transaction.value());
-        newtransaction.setSender(sender);
-        newtransaction.setReceiver(receiver);
-        newtransaction.setTimestamp(LocalDateTime.now());
+        TransactionModel newTransaction = new TransactionModel();
+        newTransaction.setAmount(transaction.value());
+        newTransaction.setSender(sender);
+        newTransaction.setReceiver(receiver);
+        newTransaction.setTimestamp(LocalDateTime.now());
 
         sender.setBalance(sender.getBalance().subtract(transaction.value()));
         receiver.setBalance(receiver.getBalance().add(transaction.value()));
 
-        this.repository.save(newtransaction);
+        this.repository.save(newTransaction);
         this.userService.saveUser(sender);
         this.userService.saveUser(receiver);
+
+        this.notificationService.sendNotification(sender, "Transação realizada com sucesso");
+        this.notificationService.sendNotification(receiver, "Transação recebida com sucesso");
+
+        return newTransaction;
     }
 
     public boolean authorizeTransaction(UserModel sender, BigDecimal value) {
