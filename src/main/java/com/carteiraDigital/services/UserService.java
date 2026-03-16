@@ -1,8 +1,6 @@
 package com.carteiraDigital.services;
 
 import com.carteiraDigital.DTOs.UserDTO;
-import com.carteiraDigital.exceptions.NotFoundException;
-import com.carteiraDigital.exceptions.UnauthorizedException;
 import com.carteiraDigital.models.UserModel;
 import com.carteiraDigital.repositories.UserRepository;
 import com.carteiraDigital.types.UserType;
@@ -19,19 +17,19 @@ public class UserService {
     private final UserRepository repository;
 
     // Validar transação
-    public void validateTransaction(UserModel sender, BigDecimal amount) {
+    public void validateTransaction(UserModel sender, BigDecimal amount) throws Exception {
         if (sender.getUserType() == UserType.MERCHANT) {
-            throw new UnauthorizedException("Usuário do tipo lojista não está autorizado a fazer transações");
+            throw new Exception("Usuário do tipo lojista não está autorizado a fazer transações");
         }
 
         if(sender.getBalance().compareTo(amount) < 0) {
-            throw new UnauthorizedException("Saldo insuficiente");
+            throw new Exception("Saldo insuficiente");
         }
     }
 
     // Encontrar usuário
-    public UserModel findUserById(Long id) {
-        return this.repository.findUserById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    public UserModel findUserById(Long id) throws Exception {
+        return this.repository.findUserById(id).orElseThrow(() -> new Exception("Usuário não encontrado"));
     }
 
     // Resgatar todos os usuários

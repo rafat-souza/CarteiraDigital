@@ -1,7 +1,6 @@
 package com.carteiraDigital.services;
 
 import com.carteiraDigital.DTOs.TransactionDTO;
-import com.carteiraDigital.exceptions.UnauthorizedException;
 import com.carteiraDigital.models.TransactionModel;
 import com.carteiraDigital.models.UserModel;
 import com.carteiraDigital.repositories.TransactionRepository;
@@ -35,7 +34,7 @@ public class TransactionService {
 
         boolean isAuthorized = this.authorizeTransaction(sender, transaction.value());
         if(!this.authorizeTransaction(sender, transaction.value())){
-            throw new UnauthorizedException("Transação não autorizada");
+            throw new Exception("Transação não autorizada");
         }
 
         TransactionModel newTransaction = new TransactionModel();
